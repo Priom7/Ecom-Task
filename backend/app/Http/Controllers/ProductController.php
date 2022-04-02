@@ -43,6 +43,7 @@ class ProductController extends Controller
             return response()->json(["status" => "failed", "message" => "Validation error", "errors" => $validator->errors()]);
         }
 
+        //for uploading multiple images 
         if($request->has('images')) {
             foreach($request->file('images') as $image) {
                 $filename = time().rand(). '.'.$image->getClientOriginalExtension();
@@ -64,5 +65,44 @@ class ProductController extends Controller
             $response["message"] = "Failed! product(s) not uploaded";
         }
         return response()->json($response);
+    }
+
+     /**
+     * update product
+     * @param NA
+     * @return JSON response
+     */
+    public function update(Request $request) {
+        if($request->has('images')) {
+            foreach($request->file('images') as $image) {
+                $filename = time().rand(). '.'.$image->getClientOriginalExtension();
+                $image->move('uploads/', $filename);
+
+                Product::where('id', $request->id)->update([
+                    'name' => $request->name,
+                    'price'=> $request->price ? $request->price : 0.00,
+                    'image_name' => $filename
+                ]);
+            }
+
+            $response["status"] = "success";
+            $response["message"] = "Success! product(s) Updated";
+        }
+
+        else {
+            $response["status"] = "failed";
+            $response["message"] = "Failed! product(s) not Update";
+        }
+        return response()->json($response);
+    }
+
+      /**
+     * Delete product
+     * @param NA
+     * @return JSON response
+     */
+    public function delete(Request $request) {
+        Product::where('id', $request->id)->delete();
+        return response()->json(["status" => "Successfully Deleted Data", ]);
     }
 }
