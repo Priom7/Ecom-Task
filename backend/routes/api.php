@@ -21,8 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('images', [ProductController::class, 'index'])->name('images');
-Route::post('images', [ProductController::class, 'upload'])->name('images');
+Route::get('products', [ProductController::class, 'index'])->name('products');
+Route::post('products', [ProductController::class, 'upload'])->name('products');
 
 Route::group([
 
@@ -32,7 +32,6 @@ Route::group([
 ], function ($router) {
 
     Route::post('login', [AuthController::class, 'login']);
-    Route::post('register', [AuthController::class, 'signup']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('me', [AuthController::class, 'me']);

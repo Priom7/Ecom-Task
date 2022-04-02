@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('JWT', ['except' => ['index']]);
+    }
     /**
      * Fetch products
      * @param NA
