@@ -105,4 +105,17 @@ class ProductController extends Controller
         Product::where('id', $request->id)->delete();
         return response()->json(["status" => "Successfully Deleted Data", ]);
     }
+
+
+    
+      /**
+     * Search product
+     * @param NA
+     * @return JSON response
+     */
+    public function search(Request $request)
+    {
+    
+        return Product::where('name', 'LIKE', '%' . $request->get('searchKey') . '%')->get();
+    }
 }
