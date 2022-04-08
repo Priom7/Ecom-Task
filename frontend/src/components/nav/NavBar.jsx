@@ -12,7 +12,9 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../redux/actions/authAction";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -57,6 +59,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBar() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
+  const handleLogOut = () => {
+    dispatch(logOut());
+    navigate("/");
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -89,11 +99,26 @@ export default function NavBar() {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          <Button color="inherit">
-            <Link style={{ color: "white" }} to="/login">
-              LogIn
-            </Link>
-          </Button>
+          {auth.id ? (
+            <>
+              <Typography style={{ color: "white" }} variant="subtitle2">
+                Logged in as {auth.name}
+              </Typography>
+              <Button edge="end" color="inherit" onClick={() => handleLogOut()}>
+                <Link style={{ color: "white" }} to="/">
+                  log Out
+                </Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button color="inherit">
+                <Link style={{ color: "white" }} to="/login">
+                  LogIn
+                </Link>
+              </Button>
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
