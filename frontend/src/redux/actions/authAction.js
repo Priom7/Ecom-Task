@@ -47,7 +47,7 @@ export const loadUser = () => {
         } else return null;
       })
       .catch((error) => {      
-        toast.error(" You are not an Admin 🚫, Enjoy your shopping 🛒🛒", {
+        toast.error(" Log in to get Admin access ⚙️⚙️, Or Enjoy your shopping 🛒🛒", {
           position: toast.POSITION.TOP_RIGHT,
         });
       });
