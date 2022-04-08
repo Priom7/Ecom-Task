@@ -17,7 +17,8 @@ class ProductController extends Controller
      * @param NA
      * @return JSON response
      */
-    public function index() {
+    public function index()
+    {
         $products = Product::all();
         return response()->json(["status" => "success", "count" => count($products), "data" => $products]);
     }
@@ -27,95 +28,86 @@ class ProductController extends Controller
      * @param $request
      * @return JSON response
      */
-    public function upload(Request $request) {
-        $productsName = [];
+    public function upload(Request $request)
+    {
         $response = [];
 
-        $validator = Validator::make($request->all(),
+        $validator = Validator::make(
+            $request->all(),
             [
                 'name' => 'required',
-                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'images' => 'max:1',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:20000',
             ]
         );
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(["status" => "failed", "message" => "Validation error", "errors" => $validator->errors()]);
         }
+        $request->has('images') ? $filename = $this->createImagePath($request->images) : $filename = "box.png";
 
-        //for uploading multiple images 
-        if($request->has('images')) {
-            foreach($request->file('images') as $image) {
-                $filename = time().rand(). '.'.$image->getClientOriginalExtension();
-                $image->move('uploads/', $filename);
+        Product::create([
+            'name' => $request->name,
+            'price' => $request->price ? $request->price : 0.00,
+            'image_name' => $filename
+        ]);
 
-                Product::create([
-                    'name' => $request->name,
-                    'price'=> $request->price ? $request->price : 0.00,
-                    'image_name' => $filename
-                ]);
-            }
-
-            $response["status"] = "success";
-            $response["message"] = "Success! product(s) uploaded";
-        }
-
-        else {
-            $response["status"] = "failed";
-            $response["message"] = "Failed! product(s) not uploaded";
-        }
-        return response()->json($response);
+        return response()->json(["status" => "success", "message" => "Success! product(s) uploaded"]);
     }
 
-     /**
+    /**
      * update product
      * @param NA
      * @return JSON response
      */
-    public function update(Request $request) {
-        if($request->has('images')) {
-            foreach($request->file('images') as $image) {
-                $filename = time().rand(). '.'.$image->getClientOriginalExtension();
-                $image->move('uploads/', $filename);
+    public function update(Request $request)
+    {
 
-                Product::where('id', $request->id)->update([
-                    'name' => $request->name,
-                    'price'=> $request->price ? $request->price : 0.00,
-                    'image_name' => $filename
-                ]);
-            }
 
-            $response["status"] = "success";
-            $response["message"] = "Success! product(s) Updated";
-        }
+        $request->has('images') ? $filename = $this->createImagePath($request->images) : $filename = "box.png";
 
-        else {
-            $response["status"] = "failed";
-            $response["message"] = "Failed! product(s) not Update";
-        }
-        return response()->json($response);
+        Product::where('id', $request->id)->update([
+            'name' => $request->name,
+            'price' => $request->price ? $request->price : 0.00,
+            'image_name' => $filename
+        ]);
+
+        return response()->json(["status" => "success", "message" => "Success! product(s) updated"]);
     }
 
-      /**
+    /**
      * Delete product
      * @param NA
      * @return JSON response
      */
-    public function delete(Request $request) {
+    public function delete(Request $request)
+    {
         Product::where('id', $request->id)->delete();
-        return response()->json(["status" => "Successfully Deleted Data", ]);
+        return response()->json(["status" => "Successfully Deleted Data",]);
     }
 
 
-    
-      /**
+
+    /**
      * Search product
      * @param NA
      * @return JSON response
      */
     public function search(Request $request)
     {
-    
+
         return Product::where('name', 'LIKE', '%' . $request->get('searchKey') . '%')->get();
+    }
+
+    /**
+     * Create Path product
+     * @param NA
+     * @return String response
+     */
+    public function createImagePath($images)
+    {
+        $filename = time() . rand() . '.' . $images->getClientOriginalExtension();
+        $images->move('uploads/', $filename);
+
+        return $filename;
     }
 }
