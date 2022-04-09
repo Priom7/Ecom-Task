@@ -18,3 +18,9 @@ npm start
 https://documenter.getpostman.com/view/9052297/UVyswvfM
 
 
+## App UI 
+
+![](snapshots/1.jpg)
+![](snapshots/2.jpg)
+![](snapshots/3.jpg)
+![](snapshots/4.jpg)
