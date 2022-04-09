@@ -15,7 +15,6 @@ export const logIn = (email, password) => {
         });
       })
       .catch((error) => {
-        console.log(error.response);
         toast.error(error.response?.data, {
           position: toast.POSITION.TOP_RIGHT,
         });
@@ -32,9 +31,7 @@ export const logOut = () => {
 };
 
 export const loadUser = () => {
-  return (dispatch, getState) => {
-    const token = getState().auth.access_token;
-    console.log("Token: ", token);
+  return (dispatch) => {
     axios
       .post(`${url}/auth/me`, {}, setHeaders())
       .then((user) => {
@@ -46,8 +43,31 @@ export const loadUser = () => {
           });
         } else return null;
       })
-      .catch((error) => {      
-        toast.error(" Log in to get Admin access ⚙️⚙️, Or Enjoy your shopping 🛒🛒", {
+      .catch((error) => {
+        toast.error(
+          " Log in to get Admin access ⚙️⚙️, Or Enjoy your shopping 🛒🛒",
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+      });
+  };
+};
+
+export const signUpUser = (email, password, name) => {
+  return (dispatch) => {
+    axios
+      .post(`${url}/auth/register`, { email, password, name })
+      .then((token) => {
+        localStorage.setItem("token", token.data.access_token);
+
+        dispatch({
+          type: "SIGN_UP",
+          token: token.data.access_token,
+        });
+      })
+      .catch((error) => {
+        toast.error(error.response?.data, {
           position: toast.POSITION.TOP_RIGHT,
         });
       });

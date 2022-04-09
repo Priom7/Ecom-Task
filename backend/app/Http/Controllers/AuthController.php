@@ -5,19 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     //
-     /**
+    /**
      * Create a new AuthController instance.
      *
      * @return void
      */
     public function __construct()
     {
-        $this->middleware('JWT', ['except' => ['login']]);
+        $this->middleware('JWT', ['except' => ['login', 'signup']]);
     }
 
     /**
@@ -29,7 +30,7 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -84,4 +85,28 @@ class AuthController extends Controller
         ]);
     }
 
+    public function signup(Request $request)
+    {
+
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|string|min:6|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+            ], 200);
+        }
+
+        $user = new User;
+        $user->fill($request->all());
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+
+        return $this->login($request);
+    }
 }

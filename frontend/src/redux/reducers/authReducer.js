@@ -10,6 +10,7 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case "LOG_IN":
+    case "SIGN_UP":
     case "USER_LOADED":
       toast("Welcome...😎😎" + action.user.data.name + "...", {
         position: toast.POSITION.TOP_RIGHT,

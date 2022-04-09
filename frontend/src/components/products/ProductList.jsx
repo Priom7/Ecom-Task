@@ -7,7 +7,6 @@ const ProductList = ({ product, setProduct }) => {
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.products.data);
   const paginationData = useSelector((state) => state.products);
-  console.log("Daa", paginationData);
   const auth = useSelector((state) => state.auth);
   const [searchKey, setSearchKey] = useState({
     searchKey: "",
@@ -27,7 +26,6 @@ const ProductList = ({ product, setProduct }) => {
   const handlePageChange = (pageNumber) => {
     setActivePage({ page: pageNumber });
   };
-  console.log(productList, product, auth);
   return (
     <div className="row">
       <div className="input-group mb-3">

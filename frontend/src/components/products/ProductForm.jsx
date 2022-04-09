@@ -39,6 +39,7 @@ const ProductForm = ({ product, setProduct }) => {
     }
     setProduct({ name: "", images: "", price: "", id: "" });
     setSelectedFile("");
+    document.querySelector("#imageForm").reset();
   };
 
   return (

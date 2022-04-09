@@ -75,9 +75,7 @@ export default function NavBar() {
 
   const handleBlur = (e) => {
     if (e.key === "Enter") {
-      console.log(e.target.value);
       dispatch(searchProduct(searchKey));
-      console.log("nav", productList);
     }
   };
   return (
@@ -134,6 +132,11 @@ export default function NavBar() {
               <Button color="inherit">
                 <Link style={{ color: "white", textDecoration: "none" }} to="/login">
                   LogIn
+                </Link>
+              </Button>
+              <Button color="inherit">
+                <Link style={{ color: "white", textDecoration: "none" }} to="/signup">
+                  SignUp
                 </Link>
               </Button>
             </>

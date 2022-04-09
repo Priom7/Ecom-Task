@@ -12,7 +12,6 @@ const Product = ({ product, productList, setProduct }) => {
   const handleOnUpdateClick = (select) => {
     const searchedProduct = productList.find((product) => product.id === select.id);
     setProduct({ ...searchedProduct });
-    console.log("HERE",searchedProduct);
     window.scrollTo({
       top: 0,
       left: 0,

@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./redux/actions/authAction";
+import SignUp from "./components/auth/SignUp";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function App() {
           <NavBar />
           <Container maxWidth={false}>
             <Routes>
+            <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<LogIn />} />
               <Route path="/" element={<ProductDashboard />} />
             </Routes>
