@@ -19,7 +19,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::paginate(10);
         return response()->json(["status" => "success", "count" => count($products), "data" => $products]);
     }
 
@@ -97,7 +97,7 @@ class ProductController extends Controller
     public function search(Request $request)
     {
 
-        return Product::where('name', 'LIKE', '%' . $request->get('searchKey') . '%')->get();
+        return Product::where('name', 'LIKE', '%' . $request->get('searchKey') . '%')->paginate(10);
     }
 
     /**

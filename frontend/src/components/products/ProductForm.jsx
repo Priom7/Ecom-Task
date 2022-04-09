@@ -37,7 +37,6 @@ const ProductForm = ({ product, setProduct }) => {
       dispatch(addProduct(newProduct));
       dispatch(getProducts());
     }
-    console.log("afdsfsdfsdf");
     setProduct({ name: "", images: "", price: "", id: "" });
     setSelectedFile("");
   };

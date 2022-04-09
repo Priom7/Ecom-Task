@@ -2,10 +2,10 @@ import axios from "axios";
 import { url, setHeaders } from "../../api_connection/api";
 import { toast } from "react-toastify";
 
-export const getProducts = () => {
+export const getProducts = (pageNumber) => {
   return (dispatch) => {
     axios
-      .get(`${url}/products`, setHeaders())
+      .post(`${url}/products_get`,pageNumber, setHeaders())
       .then((products) => {
         var productList = products.data.data;
         dispatch({
@@ -60,7 +60,7 @@ export const updateProduct = (updatedProduct) => {
         });
       })
       .catch((error) => {
-        console.log(error);
+
         toast.error(error.response?.data, {
           position: toast.POSITION.TOP_RIGHT,
         });
@@ -79,7 +79,6 @@ export const deleteProduct = (product) => {
         });
       })
       .catch((error) => {
-        console.log(error);
         toast.error(error.response?.data, {
           position: toast.POSITION.TOP_RIGHT,
         });

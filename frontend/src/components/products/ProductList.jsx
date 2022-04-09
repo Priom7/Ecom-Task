@@ -2,37 +2,43 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts, searchProduct } from "../../redux/actions/productAction";
 import Product from "./Product";
-
+import Pagination from "react-js-pagination";
 const ProductList = ({ product, setProduct }) => {
   const dispatch = useDispatch();
-  const productList = useSelector((state) => state.products);
+  const productList = useSelector((state) => state.products.data);
+  const paginationData = useSelector((state) => state.products);
+  console.log("Daa", paginationData);
   const auth = useSelector((state) => state.auth);
   const [searchKey, setSearchKey] = useState({
     searchKey: "",
   });
+  const [page, setActivePage] = useState({
+    page: 1,
+  });
   useEffect(() => {
-    dispatch(getProducts());
-  }, [product.id, dispatch]);
+    dispatch(getProducts(page));
+  }, [product.id, dispatch, page.page]);
 
   const handleBlur = (e) => {
     if (e.key === "Enter") {
-      console.log(e.target.value);
       dispatch(searchProduct(searchKey));
-      console.log("nav", productList);
     }
+  };
+  const handlePageChange = (pageNumber) => {
+    setActivePage({ page: pageNumber });
   };
   console.log(productList, product, auth);
   return (
     <div className="row">
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1">
+      <div className="input-group mb-3">
+        <div className="input-group-prepend">
+          <span className="input-group-text" id="basic-addon1">
             Search 🔍
           </span>
         </div>
         <input
           type="text"
-          class="form-control"
+          className="form-control"
           placeholder="Search for products..."
           aria-label="Search"
           aria-describedby="basic-addon1"
@@ -43,7 +49,21 @@ const ProductList = ({ product, setProduct }) => {
           onKeyDown={handleBlur}
         />
       </div>
-
+      <div>
+        {productList && (
+          <Pagination
+            activePage={paginationData.current_page}
+            itemsCountPerPage={paginationData.per_page}
+            totalItemsCount={paginationData.total}
+            pageRangeDisplayed={paginationData.last_page}
+            onChange={handlePageChange}
+            itemClass="page-item"
+            linkClass="page-link"
+            firstPageText="First"
+            lastPageText="Last"
+          />
+        )}
+      </div>
       {productList &&
         productList.map((product) => {
           return (
@@ -55,6 +75,8 @@ const ProductList = ({ product, setProduct }) => {
             ></Product>
           );
         })}
+
+      <div></div>
     </div>
   );
 };
