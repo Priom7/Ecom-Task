@@ -19,7 +19,16 @@ const productReducer = (productList = [], action) => {
         position: toast.POSITION.TOP_RIGHT,
       });
       return productList;
-
+    case "SEARCH_PRODUCT":
+      console.log("SEARCH_PRODUCT", productList);
+      action.productList.length === 0
+        ? toast.error("No such product is available! 😕😕", {
+            position: toast.POSITION.TOP_RIGHT,
+          })
+        : toast.success("Found Something 📦📦", {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+      return action.productList;
     default:
       return productList;
   }

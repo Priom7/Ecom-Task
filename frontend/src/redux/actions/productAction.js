@@ -45,7 +45,6 @@ export const addProduct = (newProduct) => {
 
 export const updateProduct = (updatedProduct) => {
   return (dispatch) => {
- 
     const data = new FormData();
     data.append("images", updatedProduct.images);
     data.append("name", updatedProduct.name);
@@ -81,6 +80,26 @@ export const deleteProduct = (product) => {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.response?.data, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      });
+  };
+};
+
+export const searchProduct = (searchKey) => {
+  return (dispatch) => {
+    axios
+      .post(`${url}/product_search`, searchKey)
+      .then((products) => {
+        var productList = products.data;
+        dispatch({
+          type: "SEARCH_PRODUCT",
+          productList,
+        });
+        
+      })
+      .catch((error) => {
         toast.error(error.response?.data, {
           position: toast.POSITION.TOP_RIGHT,
         });

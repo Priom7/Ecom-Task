@@ -15,6 +15,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../redux/actions/authAction";
+import { searchProduct } from "../../redux/actions/productAction";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -26,7 +27,7 @@ const Search = styled("div")(({ theme }) => ({
   marginLeft: 0,
   width: "100%",
   [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(1),
+    marginLeft: theme.spacing(2),
     width: "auto",
   },
 }));
@@ -62,10 +63,22 @@ export default function NavBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  const productList = useSelector((state) => state.products);
+  const [searchKey, setSearchKey] = React.useState({
+    searchKey: "",
+  });
 
   const handleLogOut = () => {
     dispatch(logOut());
     navigate("/");
+  };
+
+  const handleBlur = (e) => {
+    if (e.key === "Enter") {
+      console.log(e.target.value);
+      dispatch(searchProduct(searchKey));
+      console.log("nav", productList);
+    }
   };
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -86,17 +99,23 @@ export default function NavBar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            <Link style={{ color: "white" }} to="/">
-              E-Shop
+            <Link style={{ color: "white", textDecoration: "none" }} to="/">
+              📦📦 E-Shop 🛒 🛒
             </Link>
           </Typography>
+
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder="Search… (Press Enter)"
               inputProps={{ "aria-label": "search" }}
+              onChange={(e) =>
+                setSearchKey({ ...searchKey, searchKey: e.target.value })
+              }
+              onBlur={handleBlur}
+              onKeyDown={handleBlur}
             />
           </Search>
           {auth.id ? (
@@ -105,7 +124,7 @@ export default function NavBar() {
                 Logged in as {auth.name}
               </Typography>
               <Button edge="end" color="inherit" onClick={() => handleLogOut()}>
-                <Link style={{ color: "white" }} to="/">
+                <Link style={{ color: "white", textDecoration: "none" }} to="/">
                   log Out
                 </Link>
               </Button>
@@ -113,7 +132,7 @@ export default function NavBar() {
           ) : (
             <>
               <Button color="inherit">
-                <Link style={{ color: "white" }} to="/login">
+                <Link style={{ color: "white", textDecoration: "none" }} to="/login">
                   LogIn
                 </Link>
               </Button>
