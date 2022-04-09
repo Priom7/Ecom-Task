@@ -8,7 +8,7 @@ const ProductDashboard = () => {
   const [product, setProduct] = useState({
     name: "",
     price: "",
-    image: "",
+    images: "",
     id: "",
   });
 

@@ -81,6 +81,8 @@ class ProductController extends Controller
      */
     public function delete(Request $request)
     {
+    
+        unlink("uploads/" . $request->image_name);
         Product::where('id', $request->id)->delete();
         return response()->json(["status" => "Successfully Deleted Data",]);
     }

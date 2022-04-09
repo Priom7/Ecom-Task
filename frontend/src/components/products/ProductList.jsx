@@ -14,7 +14,7 @@ const ProductList = ({ product, setProduct }) => {
 
   console.log(productList, product, auth);
   return (
-    <div>
+    <div className="row">
       {productList &&
         productList.map((product) => {
           return (
